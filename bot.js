@@ -1,7 +1,9 @@
 const { mongoose } = require("mongoose")
+const express = require('express')
 require("dotenv").config()
-const { Bot, InlineKeyboard, session } = require("grammy")
+const { Bot, InlineKeyboard, session, webhookCallback } = require("grammy")
 const { ethers } = require("ethers")
+
 
 //Mongoose Connection String
 
@@ -62,6 +64,11 @@ bot.use(session({
     getSessionKey: (ctx) => ctx.from?.id.toString()
 }
 ))
+
+
+const app = express();
+app.use(express.json());
+app.use(webhookCallback(bot,'express'))
 
 
 
@@ -147,8 +154,15 @@ bot.on("message:text", async (ctx) => {
 bot.catch((err) => {
     console.log("Some error has occured and it is", err)
 })
-bot.start().then(() => {
-    console.log("Your Bot has started working")
-}).catch((err) => {
-    console.log("Error Occured while starting bot", err)
+
+
+
+app.listen(process.env.PORT,()=>{
+    console.log("Server is working on Port ",process.env.PORT)
+    /* bot.start().then(() => {
+        console.log("Your Bot has started working")
+    }).catch((err) => {
+        console.log("Error Occured while starting bot", err)
+    }) */
+
 })
