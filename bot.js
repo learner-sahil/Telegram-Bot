@@ -68,7 +68,18 @@ bot.use(session({
 
 const app = express();
 app.use(express.json());
-app.use(webhookCallback(bot,'express'))
+app.use(express.urlencoded({extended: true}))
+
+// Add error handling wrapper
+const webhook = webhookCallback(bot, 'express', { 
+    onTimeout: () => console.warn('Webhook timeout'),
+    timeoutMilliseconds: 30000 
+  });
+  
+  app.post('/webhook', (req, res, next) => {
+    console.log('Received update');
+    webhook(req, res, next);
+  });
 
 
 
