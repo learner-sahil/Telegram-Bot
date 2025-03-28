@@ -5,7 +5,7 @@ const { ethers } = require("ethers")
 
 //Mongoose Connection String
 
-mongoose.connect("mongodb://127.0.0.1:27017/test").then(() => {
+mongoose.connect(process.env.CONNECTION_STRING).then(() => {
     console.log("MongoDb is successfully connected")
 }).catch((e) => {
     console.log("Some error might have occured", e)
