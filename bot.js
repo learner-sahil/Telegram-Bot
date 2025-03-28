@@ -71,7 +71,7 @@ app.use(express.json());
 app.use(express.urlencoded({extended: true}))
 
 // Add error handling wrapper
-const webhook = webhookCallback(bot, 'express', { 
+/* const webhook = webhookCallback(bot, 'express', { 
     onTimeout: () => console.warn('Webhook timeout'),
     timeoutMilliseconds: 30000 
   });
@@ -79,7 +79,7 @@ const webhook = webhookCallback(bot, 'express', {
   app.post('/webhook', (req, res, next) => {
     console.log('Received update');
     webhook(req, res, next);
-  });
+  }); */
 
 
 
@@ -170,10 +170,10 @@ bot.catch((err) => {
 
 app.listen(process.env.PORT,()=>{
     console.log("Server is working on Port ",process.env.PORT)
-    /* bot.start().then(() => {
+    bot.start().then(() => {
         console.log("Your Bot has started working")
     }).catch((err) => {
         console.log("Error Occured while starting bot", err)
-    }) */
+    })
 
 })
