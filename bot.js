@@ -85,8 +85,7 @@ app.use(express.urlencoded({extended: true}))
 
 bot.command("start", async (ctx) => {
     try {
-            ctx.reply("Hello Welcome to my bot")
-            await ctx.reply("Come Here Every 24 Hours to collect free MONAD faucets", {
+            await ctx.reply("Hello Welcome to my bot\n Come Here Every 24 Hours to collect free MONAD faucets", {
                 reply_markup: new InlineKeyboard()
                 .url("\u2705 Join My Group", "https://t.me/InfinityLoot").row()
                 .url("\u{1F534} Join My Youtube Channel", "https://www.youtube.com/channel/UCYiTB7PeBxSsDHtbQOnLVUQ").row()
@@ -126,17 +125,18 @@ bot.callbackQuery("check_join", async (ctx) => {
 
 //Upon receiving any message
 
-bot.on("message:text", async (ctx) => {
-    try{
-
-        if (ctx.session.step) {
-            const walletAddress = ctx.message.text.trim();
-            if (!ethers.isAddress(walletAddress)) {
-                console.log("Invalid Wallet Address")
-                await ctx.reply("\u274C Invalid Wallet Address \u274C")
-            return;
-        }
-        const now = Date.now();
+bot.on("message:text",
+    async (ctx) => {
+        try{
+            
+            if (ctx.session.step) {
+                const walletAddress = ctx.message.text.trim();
+                if (!ethers.isAddress(walletAddress)) {
+                    console.log("Invalid Wallet Address")
+                    await ctx.reply("\u274C Invalid Wallet Address \u274C")
+                    return;
+                }
+                const now = Date.now();
         const coolDownPeriod = 24 * 60 * 60 * 1000
         const lastClaim = ctx.session.lastClaim
         if (lastClaim && (now - lastClaim) < coolDownPeriod) {
