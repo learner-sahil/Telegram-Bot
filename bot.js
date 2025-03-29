@@ -84,15 +84,20 @@ app.use(express.urlencoded({extended: true}))
 
 
 bot.command("start", async (ctx) => {
-    ctx.reply("Hello Welcome to my bot")
-    await ctx.reply("Come Here Every 24 Hours to collect free MONAD faucets", {
-        reply_markup: new InlineKeyboard()
-            .url("\u2705 Join My Group", "https://t.me/InfinityLoot").row()
-            .url("\u{1F534} Join My Youtube Channel", "https://www.youtube.com/channel/UCYiTB7PeBxSsDHtbQOnLVUQ").row()
-            .url("\u{1D54F}Follow me on X", "https://x.com/InvestioCS").row()
-            .url("\u{1F4F7}Follow me on Instagram", "https://www.instagram.com/investiocs").row()
-            .text("\u2705Check Membership", "check_join").row()
-    })
+    try {
+            ctx.reply("Hello Welcome to my bot")
+            await ctx.reply("Come Here Every 24 Hours to collect free MONAD faucets", {
+                reply_markup: new InlineKeyboard()
+                .url("\u2705 Join My Group", "https://t.me/InfinityLoot").row()
+                .url("\u{1F534} Join My Youtube Channel", "https://www.youtube.com/channel/UCYiTB7PeBxSsDHtbQOnLVUQ").row()
+                .url("\u{1D54F}Follow me on X", "https://x.com/InvestioCS").row()
+                .url("\u{1F4F7}Follow me on Instagram", "https://www.instagram.com/investiocs").row()
+                .text("\u2705Check Membership", "check_join").row()
+            })
+    } 
+    catch (error) {
+        console.log("There is some error while replying to start command ",error)
+    }
 })
 
 // Checks Whether the User has joined the Group or not
@@ -122,11 +127,13 @@ bot.callbackQuery("check_join", async (ctx) => {
 //Upon receiving any message
 
 bot.on("message:text", async (ctx) => {
-    if (ctx.session.step) {
-        const walletAddress = ctx.message.text.trim();
-        if (!ethers.isAddress(walletAddress)) {
-            console.log("Invalid Wallet Address")
-            await ctx.reply("\u274C Invalid Wallet Address \u274C")
+    try{
+
+        if (ctx.session.step) {
+            const walletAddress = ctx.message.text.trim();
+            if (!ethers.isAddress(walletAddress)) {
+                console.log("Invalid Wallet Address")
+                await ctx.reply("\u274C Invalid Wallet Address \u274C")
             return;
         }
         const now = Date.now();
@@ -161,6 +168,10 @@ bot.on("message:text", async (ctx) => {
     else {
         ctx.reply("Invalid Input")
     }
+}
+catch(err){
+    console.log("Error Message other than start and is blocked",err)
+}
 })
 bot.catch((err) => {
     console.log("Some error has occured and it is", err)
@@ -169,11 +180,11 @@ bot.catch((err) => {
 
 
 app.listen(process.env.PORT,()=>{
-    console.log("Server is working on Port ",process.env.PORT)
-    bot.start().then(() => {
-        console.log("Your Bot has started working")
-    }).catch((err) => {
-        console.log("Error Occured while starting bot", err)
-    })
+    console.log("Server is working on Port ",process.env.PORT)    
+})
 
+bot.start().then(() => {
+    console.log("Your Bot has started working")
+}).catch((err) => {
+    console.log("Error Occured while starting bot", err)
 })
