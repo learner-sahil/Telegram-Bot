@@ -1,5 +1,6 @@
 const { mongoose } = require("mongoose")
 const express = require("express")
+const bodyParser = require("body-parser")
 require("dotenv").config()
 const { Bot, InlineKeyboard, session, webhookCallback } = require("grammy")
 const { ethers } = require("ethers")
@@ -177,7 +178,12 @@ bot.catch((err) => {
     console.log("Some error has occured and it is", err)
 })
 
-
+app.get("/ping",(req,res)=>{
+    res.status(200).json({
+        success: true,
+        message : "Bot is active"
+    })
+})
 
 app.listen(process.env.PORT,()=>{
     console.log("Server is working on Port ",process.env.PORT)    
