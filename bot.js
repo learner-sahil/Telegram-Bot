@@ -8,7 +8,7 @@ const { ethers } = require("ethers")
 
 //Mongoose Connection String
 
-mongoose.connect(process.env.CONNECTION_STRING).then(() => {
+mongoose.connect(process.env.OFFLINE_CONNECTION_STRING).then(() => {
     console.log("MongoDb is successfully connected")
 }).catch((e) => {
     console.log("Some error might have occured", e)
@@ -58,7 +58,7 @@ const mongoLegacyStorage = () => ({
     }
 })
 
-const bot = new Bot(process.env.BOT_API)
+const bot = new Bot(process.env.MERA_BOT_API)
 bot.use(session({
     initial: () => ({ _id: null, walletAddress: null, lastClaim: null, step: false }),
     storage: mongoLegacyStorage(),
@@ -88,7 +88,7 @@ bot.command("start", async (ctx) => {
     try {
             await ctx.reply("Hello Welcome to my bot\n Come Here Every 24 Hours to collect free MONAD faucets", {
                 reply_markup: new InlineKeyboard()
-                .url("\u2705 Join My Group", "https://t.me/InfinityLoot").row()
+                .url("\u2705 Join My Group", "https://t.me/+z5_oOhrrh7hmNTZl").row()
                 .url("\u{1F534} Join My Youtube Channel", "https://www.youtube.com/channel/UCYiTB7PeBxSsDHtbQOnLVUQ").row()
                 .url("\u{1D54F}Follow me on X", "https://x.com/InvestioCS").row()
                 .url("\u{1F4F7}Follow me on Instagram", "https://www.instagram.com/investiocs").row()
@@ -104,7 +104,7 @@ bot.command("start", async (ctx) => {
 
 bot.callbackQuery("check_join", async (ctx) => {
     try {
-        const member = await ctx.api.getChatMember("@InfinityLoot", ctx.from.id)
+        const member = await ctx.api.getChatMember(ctx.chat.id, ctx.from.id)
         if (["member", "adminstrator", "creator"].includes(member.status)) {
             console.log("Membership Verified")
             await ctx.reply("Membership Verified \u2705, Kindly send your wallet address now")
@@ -113,7 +113,7 @@ bot.callbackQuery("check_join", async (ctx) => {
         }
         else {
             ctx.reply("Sorry! You are not a member till now", {
-                reply_markup: new InlineKeyboard().url("Join My Group\n", "https://t.me/InfinityLoot").row()
+                reply_markup: new InlineKeyboard().url("Join My Group\n", "https://t.me/+z5_oOhrrh7hmNTZl").row()
                     .text("Check Again\n", "check_join")
             })
         }
